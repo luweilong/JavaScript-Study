@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>无标题文档</title>
+	<script>
+//		解构赋值：在解构赋值中，等号右侧是一个数组或对象，指定左侧一个或多个变量的语法和右侧的数组和对象直接量的语法保持一致
+		
+//		当发生解构赋值时，右侧的数组和对象中的一个或多个值就会被提取出来（解构），并赋值给左侧相应的变量名，除了用于常规的赋值运算符
+//	之外，解构赋值还能用于初始化用let和var声明的变量。
+//		简单的解构赋值：
+		{
+			let [x,y] = [1,2];	//等价于let x=1, y=2
+			[x,y] = [x+1,y+1];	//等价于 x=x+1, y=y+1
+			[x,y] = [y,x];		//交换两个变量的值
+			console.log([x,y]);	//输出 [3,2]
+		}
+		
+//		解构赋值右侧的数组所包含的元素不必和左侧的变量一一对应，左侧多余的变量赋值为undefined，而右侧多余的值会被忽略，JS暂
+//	未提供将右侧多余的值以数组的形式赋值给左边变量的语法,左侧的变量列表可以包含连续的逗号来跳过右侧的对应的值
+		{
+			let [x,y] = [1];	//x = 1, y = undefined
+			[x,y] = [1,2,3];	//x = 1, y = 2 右侧的3 将被忽略
+			[,x,,y] = [1,2,3,4]; //x = 2, y = 4
+		}
+		
+//		整个解构赋值运算的返回值是右侧的整个数据解构，而不是从中提取出来的某个值，所以，可以写”链式“解构赋值：
+		{
+			let first, second, all;
+			all = [first, second] = [1,2,3,4]; //first=1, second=2, all=[1,2,3,4]
+		}
+		
+//		解构赋值也可以适用于数组嵌套的情况，解构赋值的左侧应当也是同样格式的嵌套数组直接量：
+		{
+			let [one, [two, three]] = [1,[2,2.5],3]; //one = 1, two = 2, three = 2.5
+		}
+		
+//		解构赋值的右侧也可以是一个对象，当然左侧看起来也应当是一个对象直接量，对象是一个名值对的列表，中间用逗号分隔，列表用花括号括起来，
+//	名值对内冒号左侧是属性名称，冒号右侧是变量名称，每个命名属性都会从右侧对象中查找相应的赋值，每个值都会赋值给它所对应的变量,不过这种解
+//	构赋值很容易被搞混，因为属性名称和变量标识符通常写成一样的
+		{
+			let transparent = {r:0.0, g:0.0, b:0.0, a:1.0};
+			let {r:red, g:green, b:blue} = transparent; //red=0.0,green=0.0,blue=0.0
+		}
+//		就像嵌套数组可以用于解构赋值一样，嵌套对象也可以用于解构赋值，实际上，这两种语法可以合在一起使用：
+		{
+			//一个嵌套的数据结构：一个对象中包含数组，数组中又包含对象
+			let data = {
+				name: "destructring assignment",
+				type: "extension",
+				impl:[{engine: "spidermonkey", version: 1.7},
+					 {engine: "rhino", version: 1.7}]
+			};
+			let ({name: feature, impl: [{engine: impl1, version: v1},{engine: impl2}]} = data) {
+				console.log(feature);
+				console.log(impl1);
+				console.log(v1);
+				console.log(impl2);
+			}
+			
+		}
+	</script>
+</head>
+
+<body>
+</body>
+</html>
