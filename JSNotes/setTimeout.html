@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>无标题文档</title>
+	<script>
+//		计时器：
+//			setTimeout()和setInterval()可以用来注册在指定时间内单词或重复调用的函数，他们是全局函数，是window对象的方法
+		
+//		setTimeout()方法用来实现一个函数在指定的毫秒数之后运行，它返回一个值，这个值可以传递给clearTimeout用于取消这个函数的执行
+		
+//		setInterval()和setTimeout()一样，只不过这个函数会在指定毫秒数的间隔里重复调用，setInterval()同样返回一个值，可以传递
+//		给clearInterval()，用于取消后续函数的调用
+		
+//		定时器演示函数：
+		{
+			function invoke(f, start, interval, end) {
+				if(!start) start = 0;		//默认时间为0毫秒
+				if(arguments.length <= 2)	//单次调用模式
+					setTimeout(f, start);	//若干毫秒后的单次调用模式
+				else {						//多次调用模式
+					setTimeout(repeat, start);	//若干毫秒后调用repeat
+					function repeat() {
+						var h = setInterval(f, interval);	//循环调用f()
+						//假如有end，将在end毫秒后停止调用
+						if(end) setTimeout(function() { clearInterval(h); }, end);
+					}
+				}
+			}  
+		}
+		
+//		由于一些原因，setTimeout()和setInterval()的第一个参数可以传进字符串，这个字符串会在指定的超时时间或间隔之后进行求值
+		
+		如果以0毫秒的超时时间来调用setTimeout的，那么指定的函数不会立即执行。相反，会把它放到队列中，等到前面处于等待状态的事件
+	处理程序全部执行完之后，再“立即”调用它。
+		
+		
+		
+	</script>
+</head>
+
+<body>
+</body>
+</html>
