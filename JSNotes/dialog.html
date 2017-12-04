@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>无标题文档</title>
+	<script>
+//		Window对象提供了3个方法来向用户显示简单的对话框,他们分别是:
+//		1.alert() 向用户显示一条消息并等待用户关闭对话框;
+//		2.confirm() 显示一条消息,要求用户点击"确定"或者"取消"按钮,并返回一个布尔值;
+//		3.prompt() 显示一条消息,等待用户输入字符串,并返回那个字符串;
+		
+		{
+			do {
+				var name = prompt("What is your name?");
+				var correct = confirm("You entered '" + name + "' .\n" + "Click Okay to proced or Cancel to re-enter.");
+			}while(!correct) 
+				alert("Hello, " + name);
+		}
+		
+//		对话框中显示的是纯文本,而不是 HTML 格式的文本,只能用空格,换行符和各种标点符号来格式化这些对话框.
+//		尽管这3种对话框都很容易使用,但是要尽量少用它们,因为这个会破坏用户的浏览体验
+		
+//		confirm()和prompt()方法会产生阻塞,在用户关闭他们所显示的对话框前,它们不会返回,这就意味着,在弹出一个对话框前,代码停止运行,直到用户
+//	用要求的输入进行相应为止,在大多数浏览器中,alert()方法也会阻塞,并等待用户关闭对话框,但并不总是这样.
+		
+//		除了以上三种方法外,还有个更复杂一点的方法 showModalDialog() ,显示一个包含 HTML 格式的"模态对话框(显示出来就不可点选位于其下面
+//	的对话框)",可以给它传入参数,以及从对话框里面返回值.第一个参数用于指定提供对话框 HTML 内容的 URL ,第二个参数是一个任意值,这个值在对话框的
+//	脚本里面可以通过 window.dialogArguments 属性的值来访问,第三个参数是一个非标准的列表,包含以分号隔开的 name = value 对,如果提供了这个
+//	参数,可以配置对话框的尺寸和其他属性.
+		
+//		var p = window.showModalDialog("multiprompt.html",["Enter 3D point coordinates", "x", "y", "z"],
+//							   "ialogwidth:400; dialogheight:300; resizable:yes");
+//		console.log(p);
+		
+//		调试的时候发现报错,去查阅之后发现chrome不再支持showModalDialog();代替方案以后再研究
+	</script>
+</head>
+
+<body>
+</body>
+</html>
