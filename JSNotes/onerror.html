@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>无标题文档</title>
+	<script>
+//		Window 对象的onerror属性是一个事件处理程序，当未捕获的异常传播到调用栈上时就会调用它，并把错误信息输出到浏览器的 JavaScript控制
+//	台上，如果给这个属性赋值一个函数，当异常发生时，就会调用该函数，即它成了窗口的错误处理程序。
+		
+//		由于历史原因，Window对象的onerror事件处理函数的调用通过三个字符串参数，而不是通常的传递一个事件对象，第一个参数是描述错误的信息，
+//	第二个参数是一个字符串，它存放发生错误的JavaScript代码所在的文档的URL，第三个参数是文档中发生错误的行数。
+		
+//		onerror处理程序的返回值也很重要，如果它返回false，意味着浏览器事件处理程序已经处理了错误，不过在Firefox中，处理程序必须返回true来
+//	表示它已经处理过错误。
+		
+//		尽管现在的代码里面有了try/catch异常处理语句，很少使用onerror属性，但是有的时候，需要自己定义一个错误处理程序，来显示的通知你：
+		
+		window.onerror = function(msg, url, line) {
+			if(onerror.number++ < onerror.MAX) {
+				alert("ERROR: " + msg + "\n" + url + "\n" + line);
+				return true;
+			}
+		}
+		onerror.number = 0;
+		onerror.MAX = 3;
+
+	</script>
+</head>
+
+<body>
+</body>
+</html>
