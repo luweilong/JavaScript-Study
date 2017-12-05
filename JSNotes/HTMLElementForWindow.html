@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>无标题文档</title>
+	<script>
+//		如果在HTML文档中用id属性来为元素命名，并且如果Window对象没有此名字的属性，Window对象会赋予一个属性，它的名字是id属性的值，该属性的
+//	值指向表示文档元素的HTMLElement元素，因为Window对象是以全局对象存在于作用域链的最上层，所以使用id属性的HTMLElement元素有可能会成为被
+//	脚本访问的全局变量，不过当Window对象已经有此名字的属性时，这就不会发生，例如把"history"，"location"作为id的原色，不会以全局变量的方式
+//	存在，因为这些id已经被占用了，另外，当存在一个id为"x"的元素时，再显式的声明并赋值了一个全局变量x，那么像是声明的变量会隐藏隐式的元素变量。
+		
+		
+//		元素ID作为全局变量的隐式应用是web浏览器演化过程中遗留的怪癖，主要是出于与已有的web页面向后兼容性的考虑。由于浏览器厂商可以在任何时候为
+//	Window对象定义新属性，而这些新属性会破坏了使用了此隐性定义的代码，所以不推荐使用这种方法，反之，使用document.getElementById()来显式的
+//	查找元素，会更加简洁。
+		
+		{
+			var ui = ["input", "prompt", "heading"];	//数组中放需要查找的元素的id
+			ui.forEach(function(id) {					//用每个id查找对应的元素
+				ui[id] = document.getElementById(id);	//将其存放在一个属性中
+			});
+		}
+		
+//		运行完这段代码之后，ui.input、ui.prompt和ui.heading会引用文档元素，脚本可以用全局变量，input，heading来代替ui.input和ui.heading
+//	因为Window对象里面有prompt()方法，所以脚本不能使用prompt代替ui.prompt;
+		
+		
+//		假设ID没有被Window对象使用的话，那么任何有id属性的元素都会变成全局对象，以下HTML属性元素如果有name属性的话，也会如此表现：
+//		<a> <applet> <area> <embed> <form> <frame> <frameset> <iframe> <img> <object>
+		
+//		因为id属性的值在HTML里面是唯一的，所以只会产生一个全局变量，但是name可以相同，所以当以上的元素出现了相同的name时，该隐式变量会返回一个
+//	类数组对象，这个类数组对象的元素是所有命名的元素
+		
+//		特例：有name和id属性的<iframe>元素，为他们创建的隐式全局变量引用的不是表示自身的ELement元素，而是，引用表示<iframe>元素创建的嵌套
+//	浏览器的Window对象。
+		
+	</script>
+</head>
+
+<body>
+</body>
+</html>
