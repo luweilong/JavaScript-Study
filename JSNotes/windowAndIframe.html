@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>无标题文档</title>
+	<script>
+//		窗体之间的关系：
+//		
+//		Window对象的open()方法返回代表新窗口的Window对象，这个窗口具有opener属性，可以打开它的原始窗口，这样两个窗口就可以相互引用，彼此都
+//	可以读取对方的属性或者是调用对方的方法，窗体也是这样，可以使用一些属性来引用自身或者嵌套的子窗体。
+//		
+//		窗体可以使用parent属性来引用包含它的窗口或窗体的Window对象。如果一个窗口是顶级窗口或标签，而不是窗体，那么parent属性引用的是自身。
+//		
+//		parent == self;
+		
+//		如果一个窗体包含在另一个窗体中，而后者又包含在顶级窗口中，那么该窗体就可以使用parent.parent来引用顶级窗口，有一个快捷方式，一个窗体无论
+//	嵌套了多少层，它的top属性引用的都是指向包含它的顶级窗口，如果一个Window对象代表的是一个顶级窗口，那么他的top属性引用的就是窗口本身，对于顶级
+//	窗口的直接子窗体，top属性就等价于parent属性。
+//	
+//		top属性和parent属性允许脚本可以引用它的祖先窗体，有不止一种方法可以引用窗口或窗体的子孙窗体，窗体是通过<iframe>元素创建的，可以使用获取
+//	其他元素的方法来获取它，如id属性，使用 document.getElementById()方法来获取到它。<iframe>元素有contentWindow属性，引用该窗体的Window
+//	对象，所以可以这样来获取：
+//		var childFrame = document.getElmentById(id).contentWindow;
+		
+//		也可以反向操作，从表示窗体的Window对象的frameElement属性来获取该窗体的<iframe>元素，表示顶级窗口的Window对象的frameElement属性是
+//	null，窗体中的frameElement属性不是null；
+		
+//		{
+//			
+//			var elt = document.getElementById(id);
+//			var win = elt.contentWindow;
+//			win.frameElement === elt;			//对于窗体来说永远是true
+//			window.frameElement === null;		//对于顶级窗口来说永远是true
+//		}
+		
+//		尽管如此，通常不需要使用上面的方法来获取子窗体的引用。每个Window对象有一个frames数星星，它引用自身包含的窗口或窗体。frames属性是一个
+//	类数组对象，可以通过数字或窗体名进行索引，注意，frames数组里面的是Window对象，而不是<iframe>元素。
+		
+		
+//		每个窗口或窗体都是一个JavaScript的执行上下文，以Window为全局对象，如果一个窗口或窗体的代码可以应用到另外的窗口或窗体，那么一个窗口或窗体
+//	的脚本就可以和其他窗口或窗体的脚本进行交互。
+		
+//		假设一个web页面里有两个<iframe>元素，分别叫做"A"和"B"，并假设这些窗体包含的文档来自于同一个服务器，并且包含交互脚本，窗体A里面定义了一
+//	个变量。
+//		var i = 3;
+//		这个变量是全局对象的一个属性，可以用标识符来引用：
+//		window.i;
+//		由于窗体B中的脚本可以引用窗体A的Window对象，所以也可以引用窗体A中的属性：
+//		parent.A.i;
+//		同理，函数也可以这么使用，不过使用的时候必须将函数作为Window对象的属性来使用，而且假如这个函数用得很频繁，可以将这个函数赋值给一个变量。在
+//	使用的时候要牢记词法作用域。
+//		
+		
+	</script>
+</head>
+
+<body>
+</body>
+</html>
