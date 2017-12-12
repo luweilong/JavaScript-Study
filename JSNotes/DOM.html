@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>无标题文档</title>
+	<script>
+//		文本对象模型(DOM)是表示操作HTML和XML文档内容的基础API，API不是特别复杂，但是要理解大量的构架细节，首先要了解的是HTML或XML文档的
+//	嵌套元素在DOM树对象中的表示，HTML文档的树状解构包含表示HTML标签或元素和表示文本字符的文本节点，也可能包含HTML注释的节点，考虑以下简单的
+//	HTMl文档：
+//	
+//		<html>
+//			<head>
+//				<title>Sample Document</title>
+//			</head>
+//			<body>
+//				<h1>An HTML Document</h1>
+//				<p>This is a <i>simple</i> document.
+//			</body>
+//		</html>
+//				
+//		每一个标签与嵌套在标签内的文字都是一个Node对象，细分下来，有一个根节点，即Docuemnt系欸但，代表HTML元素的是Element节点，代表文本的是
+//	Text节点，他们都是Node的子类。
+//		
+//		注意，通用的Document和Element类型与HTMLDocument和HTMLElement类型之间是有严格区别的，Document类型代表一个HTML或XML文档，Element
+//	类型代表该文档中的一个元素。HTMLDocument和HTMLElement子类只是针对与HTML文档和元素。
+//	
+//		Comment节点代表HTML或XMl的注释，由于注释也是字符串，所以很像Text节点，CharacterData是Text和Comment的祖先，Attr节点类型代表XML
+//	HTML属性，但他基本不适用，因为Element类型，定义了将属性当作“名/值”对使用的方法，DocumentFragment类在实际文档中并不存在的一种节点，它表
+//	示乙烯利没有常规父节点的节点，DOM也 定义了一些不经常使用的类型，例如代表doctype声明和XML处理指令等类型。
+	</script>
+</head>
+
+<body>
+</body>
+</html>
