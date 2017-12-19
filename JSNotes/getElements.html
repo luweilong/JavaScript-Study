@@ -4,124 +4,99 @@
 	<meta charset="utf-8">
 	<title>无标题文档</title>
 	<script>
-		大多数客户端JavaScript程序运行时总是在操作一个或多个文档元素，当这些程序启动时，可以使用document来引用Docuemnt对象，但是，为了操作文档
-	中的元素，我们需要通过某种方式选取或引用这些元素的Element对象，DOM定义了许多方式来选取元素：
-		1.用指定的id属性
-		2.用指定的name属性
-		3.用指定的标签名字
-		4.用指定的CSS类
-		5.匹配指定的CSS选择器
-		
-		
-		任何HTML元素可以有一个id属性，在文档中，该值必须唯一，可以使用Document对象的getElementById()方法选取一个基于唯一ID的元素，例如
-	选取一个id为section1的元素：
-		var section1 = document.getElementById("section1");
-		
-		这是最简单的和常用的选取元素的方法，如果需要通过id查找多个元素，可以使用下面的getElements()方法，这个方法接受任意多的字符串参数，
-	返回一个对象，它把这些id映射到了对应的Element对象，如果任何一个id对应的元素未定义，则抛出一个Error对象。
-	
-		{
-			function getElement(/* ids... */) {
-				var elements = {};
-				for(let i = 0; i < arguments.length; i++) {
-					let id = argument[i];
-					let elt = document.getElementById(id);
-					if(elt == null) 
-						throw new Error("No element with id: " + id);
-					elements[id] = elt;
-				} 
-				return elements;
-			}
-			
-		}
-		
-		注意，在低于IE 8版本的浏览器中，getElementById()不区分大小写，而且也返回匹配name属性的元素。
-		
-		HTML的name属性最初打算是为表单元素分配名字，在表单提交到服务器的时候使用该属性，类似于id属性，name是给元素分配名字，但区别于id，
-	name属性不是必须唯一：多个元素可以使用相同的name，而且，和id元素不同的是，name属性只在少数的HTML元素里有效，包括表单，表单元素，<iframe>
-	和<img>元素。
-		
-		基于name属性选取元素，可以使用Docuemnt对象的getElementsByName()方法，例如，要选取一个或数个name为section2的元素：
-			var sections = document.getElementsByName("section2");
-		
-		需要注意的是，getElementByName()定义在HTMLELement类中，而不在Document类中，所以HTML文档可用，XML文档不可用，另外在IE中，该方法
-	返回id属性匹配的元素，所以要避免将相同的字符串同时用作id和name。
-	
-		之前的笔记里面，学到过讲元素赋予id和name属性，会隐式的为Window对象创建属性，对Document对象也类似，为<form>,<img>,<iframe>,<applet>,<embed>或<object>元素设置name属性，会在Docuemnt对象中创建以此name属性值为名字的属性。当然不要这样做，最好是显式的调用
-	getElementByName()方法。
-	
-		Docuemnt对象的getElementByTagName()方法可以用来选取指定类型的所有HTML和XML元素，例如，要选取文档中的所有<span>元素的只读的类数组
-	对象：
-		var spans = document.getElementsByTagName("span");
-		
-		该方法返回的是一个NodeList对象，返回元素的顺序与在文档中的顺序一致，所以可以使用下面的代码来选取文档中的第一个<P>元素：
-		var firstpara = document.getElementsByTagName("p")[0];
-		
-		因为HTML标签是不区分大小写的，所以，当在HTML文档中使用getElementByTagName()时，它是不区分大小写的标签名比较，当接受的参数是一个"*"
-	通配符时，将获得一个代表文档所有元素的NodeList对象。
-	
-		Element类也定义了getElementByTagName()方法，其原理和Document版本一样，但是它只选取调用方法的元素的后代元素，例如，要查找一个<p>
-	元素里面的第一个<span>标签，可以使用以下代码：
-		{
-			var firstpara = document.getElementsByTagName("p")[0];
-			var firstparaspan = firstpara.getElementsByTagName("span")[0];
-		}
-		此外，由于历史原因，HTMLDocument类还定义了一些快捷属性来访问各种节点，例如，images、forms和links指向了行为类似于只读数组的<img>
-	<form>,<a>（仅仅是包含href属性）元素集合，这些属性指代HTMLCollection对象，他们很像NodeList对象，但是除此之外，他们还可以用元素的ID或
-	name来索引。所以我们可以这样来引用一个name为formdemo的<form>元素：
-		document.formdemo;
-		也可以使用更加具体的引用命名来：
-		docuemnt.forms.formdemo；
-		
-		HTMLDocuemnt对象还定义了两个属性，分别是docuemnt.body和docuemnt.head属性，他们分别指代<body>和<head>,这两个属性总是会被定义，
-	如果文档的源代码没有包含<body>和<head>标签时，浏览器将隐式的创建它们，Document类的documentElement属性指代文档的根元素，在HTML中，总是
-	指代<html>标签。
-		
-		通过CSS类来选取元素，HTML元素的Class属性是一个以空格隔开的列表，他可以为空或者包含多个标识符，它描述一种方法来定义多组相关的文档元素：
-	在它们的class属性中有相同标识符的任何元素属于该组的一部分。在JavaScript中，class是保留字，所以使用了className来保存HTML的class属性值。
-	class属性通常与CSS样表一起使用，对某组内的元素使用相同的样式，HTML定义了getElementsByClassName()方法，它基于其class属性中的标识符来选取
-	成组的元素。
-	
-		getElementsByClassName()接受一个字符串参数，但是这个字符串可以是空格隔开的标识符，它的返回值是一个实时的NodeList对象，包含文档或
-	元素所有匹配的后代节点，只有当元素的class属性包含所有的指定标识符的时候才匹配，但是标识符的顺序是无关的，下面是一个使用getElementsByClassName()的例子：
-	
-		//查找class属性值中包含“warning”的所有元素
-		var warnings = docuemnt.getElementsByClassName("warning");
-		//查找以“log”命名，并且有“error”和“fatal”类的元素的所有后代
-		var log = docuemnt.getElementById("log");
-		var fatal = log.getElementsByClassName("error fatal"); //注意，多个标识符用空格隔开，而不是用逗号
-		
-		通过CSS选择器来选取元素,在CSS样式表里面有一种强大的语法，那就是选择器，它用来描述文档中的若干或多组元素，除此之外，W3C标准还定义了
-	用于获取匹配一个给定选择器的元素的JavaScript方法，即querySelectorAll()和querySelector()方法，他们都接受一个CSS选择器的字符串参数，
-	前者返回一个文档中匹配的所有元素的NodeList对象，不过需要注意的是，这个NodeList对象并不是实时的，后者返回的是第一个匹配的元素，如果都没有匹配
-	的话，前者返回一个空的NodeList对象，后者返回null，注意，有一些伪类选择器，因为匹配的不是整个元素，而是文本节点的一部分，所有有的时候会出现错误。
-	
-		docuemnt.all[]匹配的是除了文本节点外的所有元素，现在已经废弃不再使用。
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+//		大多数客户端JavaScript程序运行时总是在操作一个或多个文档元素，当这些程序启动时，可以使用document来引用Docuemnt对象，但是，为了操作文档
+//	中的元素，我们需要通过某种方式选取或引用这些元素的Element对象，DOM定义了许多方式来选取元素：
+//		1.用指定的id属性
+//		2.用指定的name属性
+//		3.用指定的标签名字
+//		4.用指定的CSS类
+//		5.匹配指定的CSS选择器
+//		
+//		
+//		任何HTML元素可以有一个id属性，在文档中，该值必须唯一，可以使用Document对象的getElementById()方法选取一个基于唯一ID的元素，例如
+//	选取一个id为section1的元素：
+//		var section1 = document.getElementById("section1");
+//		
+//		这是最简单的和常用的选取元素的方法，如果需要通过id查找多个元素，可以使用下面的getElements()方法，这个方法接受任意多的字符串参数，
+//	返回一个对象，它把这些id映射到了对应的Element对象，如果任何一个id对应的元素未定义，则抛出一个Error对象。
+//	
+//		{
+//			function getElement(/* ids... */) {
+//				var elements = {};
+//				for(let i = 0; i < arguments.length; i++) {
+//					let id = argument[i];
+//					let elt = document.getElementById(id);
+//					if(elt == null) 
+//						throw new Error("No element with id: " + id);
+//					elements[id] = elt;
+//				} 
+//				return elements;
+//			}
+//			
+//		}
+//		
+//		注意，在低于IE 8版本的浏览器中，getElementById()不区分大小写，而且也返回匹配name属性的元素。
+//		
+//		HTML的name属性最初打算是为表单元素分配名字，在表单提交到服务器的时候使用该属性，类似于id属性，name是给元素分配名字，但区别于id，
+//	name属性不是必须唯一：多个元素可以使用相同的name，而且，和id元素不同的是，name属性只在少数的HTML元素里有效，包括表单，表单元素，<iframe>
+//	和<img>元素。
+//		
+//		基于name属性选取元素，可以使用Docuemnt对象的getElementsByName()方法，例如，要选取一个或数个name为section2的元素：
+//			var sections = document.getElementsByName("section2");
+//		
+//		需要注意的是，getElementByName()定义在HTMLELement类中，而不在Document类中，所以HTML文档可用，XML文档不可用，另外在IE中，该方法
+//	返回id属性匹配的元素，所以要避免将相同的字符串同时用作id和name。
+//	
+//		之前的笔记里面，学到过讲元素赋予id和name属性，会隐式的为Window对象创建属性，对Document对象也类似，为<form>,<img>,<iframe>,<applet>,<embed>或<object>元素设置name属性，会在Docuemnt对象中创建以此name属性值为名字的属性。当然不要这样做，最好是显式的调用
+//	getElementByName()方法。
+//	
+//		Docuemnt对象的getElementByTagName()方法可以用来选取指定类型的所有HTML和XML元素，例如，要选取文档中的所有<span>元素的只读的类数组
+//	对象：
+//		var spans = document.getElementsByTagName("span");
+//		
+//		该方法返回的是一个NodeList对象，返回元素的顺序与在文档中的顺序一致，所以可以使用下面的代码来选取文档中的第一个<P>元素：
+//		var firstpara = document.getElementsByTagName("p")[0];
+//		
+//		因为HTML标签是不区分大小写的，所以，当在HTML文档中使用getElementByTagName()时，它是不区分大小写的标签名比较，当接受的参数是一个"*"
+//	通配符时，将获得一个代表文档所有元素的NodeList对象。
+//	
+//		Element类也定义了getElementByTagName()方法，其原理和Document版本一样，但是它只选取调用方法的元素的后代元素，例如，要查找一个<p>
+//	元素里面的第一个<span>标签，可以使用以下代码：
+//		{
+//			var firstpara = document.getElementsByTagName("p")[0];
+//			var firstparaspan = firstpara.getElementsByTagName("span")[0];
+//		}
+//		此外，由于历史原因，HTMLDocument类还定义了一些快捷属性来访问各种节点，例如，images、forms和links指向了行为类似于只读数组的<img>
+//	<form>,<a>（仅仅是包含href属性）元素集合，这些属性指代HTMLCollection对象，他们很像NodeList对象，但是除此之外，他们还可以用元素的ID或
+//	name来索引。所以我们可以这样来引用一个name为formdemo的<form>元素：
+//		document.formdemo;
+//		也可以使用更加具体的引用命名来：
+//		docuemnt.forms.formdemo；
+//		
+//		HTMLDocuemnt对象还定义了两个属性，分别是docuemnt.body和docuemnt.head属性，他们分别指代<body>和<head>,这两个属性总是会被定义，
+//	如果文档的源代码没有包含<body>和<head>标签时，浏览器将隐式的创建它们，Document类的documentElement属性指代文档的根元素，在HTML中，总是
+//	指代<html>标签。
+//		
+//		通过CSS类来选取元素，HTML元素的Class属性是一个以空格隔开的列表，他可以为空或者包含多个标识符，它描述一种方法来定义多组相关的文档元素：
+//	在它们的class属性中有相同标识符的任何元素属于该组的一部分。在JavaScript中，class是保留字，所以使用了className来保存HTML的class属性值。
+//	class属性通常与CSS样表一起使用，对某组内的元素使用相同的样式，HTML定义了getElementsByClassName()方法，它基于其class属性中的标识符来选取
+//	成组的元素。
+//	
+//		getElementsByClassName()接受一个字符串参数，但是这个字符串可以是空格隔开的标识符，它的返回值是一个实时的NodeList对象，包含文档或
+//	元素所有匹配的后代节点，只有当元素的class属性包含所有的指定标识符的时候才匹配，但是标识符的顺序是无关的，下面是一个使用getElementsByClassName()的例子：
+//	
+//		//查找class属性值中包含“warning”的所有元素
+//		var warnings = docuemnt.getElementsByClassName("warning");
+//		//查找以“log”命名，并且有“error”和“fatal”类的元素的所有后代
+//		var log = docuemnt.getElementById("log");
+//		var fatal = log.getElementsByClassName("error fatal"); //注意，多个标识符用空格隔开，而不是用逗号
+//		
+//		通过CSS选择器来选取元素,在CSS样式表里面有一种强大的语法，那就是选择器，它用来描述文档中的若干或多组元素，除此之外，W3C标准还定义了
+//	用于获取匹配一个给定选择器的元素的JavaScript方法，即querySelectorAll()和querySelector()方法，他们都接受一个CSS选择器的字符串参数，
+//	前者返回一个文档中匹配的所有元素的NodeList对象，不过需要注意的是，这个NodeList对象并不是实时的，后者返回的是第一个匹配的元素，如果都没有匹配
+//	的话，前者返回一个空的NodeList对象，后者返回null，注意，有一些伪类选择器，因为匹配的不是整个元素，而是文本节点的一部分，所有有的时候会出现错误。
+//	
+//		docuemnt.all[]匹配的是除了文本节点外的所有元素，现在已经废弃不再使用。
 	
 	</script>
 </head>
