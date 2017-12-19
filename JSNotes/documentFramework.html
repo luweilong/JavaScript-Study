@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>无标题文档</title>
+	<script>
+//		一旦从文档中选取了一个元素，有的时候需要从文档中选取与已选取的元素在结构上相关的部分，整个文档可以从概念上看作是一棵节点对象树，节点类型
+//	定义了遍历该树需要的属性。
+//	
+//		Document对象，它的Element对象和文档中表示文本的Text对象都是Node对象，它有许多重要的属性：
+//		
+//		parentNode：该节点的父节点，对于Document对象应该返回null， 因为它没有父节点。
+//		childNodes：只读的类数组对象(NodeList对象)，它是该节点的子节点的实时表示。
+//		firstChild：该节点的子节点的第一个，如果没有子节点则为null。
+//		lastChild：该节点的子节点的最后一个，如果没有子节点则为null。
+//		nextSibling：该节点的兄弟节点中的下一个。			//具有相同的父节点的节点互为兄弟节点
+//		previousSibling：该节点的兄弟节点中的前一个。
+//		nodeType:表示该节点的类型。9代表Document节点，1代表Element节点，3代表Text节点，8代表Comment节点，11代表DocuemntFragment节点。
+//		nodeValue：表示Text或Comment节点的内容。
+//		nodeName：元素的标签名，用大写表示。
+//		
+//		注意：以上的的属性对文档文本的变化及其敏感，因为返回的是实时对象。
+//		
+//		当主要的兴趣点集中在文档中的元素而非它们之间的文本时，我们可以使用另外一个更有用的API，它将文档看作是Element对象树，忽略部分文档：
+//	Text节点和Comment节点。
+//	
+//		该API的第一部分是Element对象的children属性，类似ChildNodes，它也是返回一个NodeList对象，不同的是children列表只包含Element对象，
+//	注意：Text和Comment节点没有children属性，它意味着上述Node.parentNode属性不可能返回Text或Comment节点，任何Element的parentNode都是
+//	另外一个Element，或者，追述到树根的Document节点或DocuemntFragment节点。
+//		第二部分则是Element属性，拥有类似于Node对性爱那个的子属性和兄弟属性：
+//		firstElementChild,lastElementChild,nextElementSibling,perviousElementSibling,区别是它们只代表Element元素。
+//		
+//		childElementCount：子元素的数量，返回的值和children.length相等。
+//		
+//		下面是一些文档遍历函数：
+//		
+//		{
+//			function parent(e, n) {			//返回e元素的第n层祖先
+//				if(n === undefined) n = 1;	
+//				while(n-- && e) e = e.parentNode;	//返回其父元素
+//				if(!e || e.nodeType !== 1) return null;	//当祖先不是Element的时候，返回null
+//				return e;
+//			}
+//			
+//		}
+//		{
+//			function sibling(e, n){ 		//返回e元素的第n个兄弟节点，n为正，后续兄弟，n为负，前面兄弟，n为0，返回自身
+//				while(e && n !== 0){
+//					if(n > 0) {
+//						if(e.nextElementSibling) e = e.nextElementSibling;
+//						else {
+//							for(e = e.nextSibling; e && e.nodeType !== 1; e = e.nextSibling)
+//						}
+//						n--;
+//					}
+//						else{
+//							if(e.previousElementSibling) e = e.previousElementSibling;
+//							else{
+//								for(e=e.previousSibling; e && e.nodeType !== 1;e = e.previousSibling)
+//							}
+//							n++
+//						}
+//				}
+//						return e;
+//			}
+//		}
+	</script>
+</head>
+
+<body>
+</body>
+</html>
