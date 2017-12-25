@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">	
+	<title>无标题文档</title>
+	<script>
+//		HTML元素由一个标签和一组称为属性的名值对组成，HTML元素的属性值在代表这些元素的HTMLElement对象的属性中是可用的。
+//		
+//		表示HTML文档元素的HTMLElement对象定义了读/写属性，它们映射了元素的HTML属性，HTMLElement定义了通用的HTTP属性，以及事件处理程序属性，
+//	而特定的Element子类型为其元素定义了特定的属性。
+//		HTML属性名不区分大小写，但JavaScript属性则大小写敏感，从HTML属性名转换到JavaScript属性名应该采用小写，但是，如果属性名包含不止一个
+//	单词，则将除了第一个单词以外的单词的首字母大写，即驼峰写法。
+//		有些HTML属性名在JavaScript里面是保留字，对于这些属性，一般的规则是为属性名加前缀“html”，有一个例外，那就是class属性，class
+//	在JavaScript里面是保留字，在JavaScript里面使用了className来保存class属性。
+//		表示HTML属性的值通常是字符串，当属性为布尔值或数值，属性也是布尔值和数值，而不是字符串，事件处理程序属性总是为Function对象或者Null，
+//	HTML5规范定义了一个新的属性，用以将元素ID转换为实际的Element对象，最后，任何HTML元素的style属性值是CSSStyleDeclaration对象，而不是
+//	字符串。
+//		如上所述，HTMLElement和其子类型定义了一些属性，它们对应于元素的标准HTML属性，Element类型还定义了getAttribute()和setAttribute()
+//	方法来查询和设置非标准的HTML属性，也可以用来查询和设置XML元素上的属性。
+//		{
+//			var image = docuemnt.images[0];
+//			var width = parseInt(image.getAttribute("WIDTH"));
+//			image.setAttribute("Class", "thumbnail");
+//		}
+//		从上面的代码可以看出，getAttribute()方法返回的不是数字，需要用parseInt()方法来转换，属性值都被看作是字符串，对于HTML元素来说，属性名
+//	不区分大小写。此外，还有两个方法，hasAttribute()和removeAttritube(),他们用来检测命名属性是否存在和删除属性。
+//		如果操作的是包含其他命名空间的属性的XML文档，可以使用下面4个方法的命名空间版本，getAttributeNS(),setAttributeNS(),hasAttributeNS(),removeAttributeNS()，这些方法需要两个属性名字符串作为参数，第一个是标识
+//	命名空间的URI，第二个通常是属性的本地名字，在命名空间中是无效的，但是特别的，setAttributeNS()的第二个参数是属性的有效名字，它包含命名空间的
+//	前缀。
+//	
+//		有的时候在HTML元素的属性上绑定另外的信息是很有用的，有的时候可以通过给class属性添加特殊的标识符来完成，其他时候针对更复杂的数据，客户端
+//	程序员会借助使用非标准的属性。例如上面的方法，getAttribute()和setAttribute()来读和写非标准属性的值，但为此而付出的代价是文档将不再是合法
+//	有效的HTML。
+//	
+//		HTML5提供了一个解决方案，在HTML5文档中，任意以"data-"为前缀的小写的属性名都是合法的，这些”数据集属性“不会对其元素的表现产生影响，他们
+//	定义了一种标准的，附加额外数据的方法，并不是在文档合法性上做出让步。
+//		HTML5还在Element对象上定义了dataset属性，该属性指代一个对象，它的各个属性对应去掉前缀data-属性，因此dataset.x对应的是data-x。
+//		
+//		需要注意的是，dataset属性是元素的data-属性的实时，双向接口，设置或删除dataset中的一个属性，就相当于设置或移除对应的data-属性。
+	</script>
+</head>
+
+<body>
+</body>
+</html>
