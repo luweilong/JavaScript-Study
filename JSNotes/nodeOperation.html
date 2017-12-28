@@ -1,0 +1,166 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>无标题文档</title>
+	<script>
+//		我们已经看到用HTML和纯文本字符串如何来查询和修改文档内容。也已经看到我们能够遍历DOcument来检查组成Document的每个Element和Text节点，
+//	在每个节点级别修改文档也是有可能的，Document类型定义了创建Element和Text节点的方法，Node类型定义了在节点树中插入，删除和替换的方法。下面
+//	是一个简短的实例。
+//		{
+//			function loadasynv(url) {
+//				var head = docuemnt.getElementsByTagName("head")[0];
+//				var s = document.createElement("script");
+//				s.src = url;
+//				head.appendChild(s);
+//			}
+//		}
+//		如以上代码所示，创建一个新的Element节点可以使用Docuemnt对象的createElement()方法，给方法传递元素的标签名，对HTML文档来说，标签名不区
+//	分大小写，对XML文档则区分大小写。
+//		Text节点也可以用类似的方法来创建：
+//		var newNode = document.createTextNode("text node content");
+//		Document还定义了一些其他的工厂方法，如createComment()，另外一种创建新文档节点的方法是复制已存在的节点，每一个节点有一个cloneNode()
+//	的方法来返回该节点的一个全新副本，给方法传递参数true也能递归的复制所有的后代节点，或传递参数false只是执行一个浅复制，在除了IE的其他浏览器中，
+//	还有一个Docuemnt的方法叫importNode()，如果给它传递另一个文档的一个节点，它将返回一个适合本文档插入的节点的副本，传递true作为第二个参数，
+//	该方法将递归的导入所有的后代节点。
+//	
+//		一旦有了一个新节点，就可以用Node的方法appendChild()或insertBefore()，将它插入到文本中，appendChild()需要在插如的Element接地那上
+//	调用，它插入指点的节点使其成为那个节点的最后一个节点。
+//		insertBefore()就像appendChild()一样，它接受两个参数，第一个是待插入节点，第二个是已存在的节点，新节点将插入到该节点的前面，该方法应该
+//	是在新节点的父节点上调用，方法的第二个参数必须是该父节点的子节点，如果第二个参数传入了null，insertBefore()的行为将和appendChild()类似。
+//		这是一个在数字索引处插入新节点的方法：
+//		{
+//			//将child插入到parent中，使其成为第n个子节点
+//			function insertAt(parent, child, n) {
+//				if(n < 0 || n > parent.childNodes.length) throw new Error("invalid index");
+//				else if (n === parent.childNodes.length) parent.appendChild(child);
+//				else parent.insertBefore(child, parent.childNodes[n]);
+//			}
+//		}
+//		如果调用appendChild()或insertBefore()将已存在的文档中的一个节点再次插入，那个节点将自动的从它当前的位置删除并在新的位置重新插入。
+//		
+//		下面的函数，基于表格指定列中的单元格的值来排序，他没有创建任何新的节点，只是用appendChild()方法来改变指定的节点的位置：
+//		
+//		{
+//			function sortRows(table, n, compatator) {
+//				var tbody = table.tBodies[0];
+//				var rows = tbody.getElementsByTagName("tr");
+//				rows = Array.prototype.slice.call(rows, 0);
+//				
+//				rows.sort(function(row1, row2) {
+//					var cell1 = row1.getElementsByTagName("td")[n];
+//					var cell2 = row2.getElementsByTagName("td")[n];
+//					var val1 = cell1.textContent || cell1.innerText;
+//					var val2 = cell3.textContent || cell2.innerText;
+//					if(compatator) return compatator(val1, val2);	//如果存在比较器，使用
+//					if(val1 < val2) return -1;		//如果不存在比较器，按照字母表排序
+//					else if(val1 > val2) return 1;
+//					else return 0;
+//				});
+//				for(var i = 0; i < rows.length; i++) tbody.appendChild(rows[i]);
+//			}
+//			//查找表格里面的<th>标签，让他们可以单击
+//			//单击该列标题，可以进行排序
+//			function makeSort(table) {
+//				var heads = table.getElementsByTagName("th");
+//				for(var i = 0; i < heads.length; i++) {
+//					(function(n) {
+//						heads[i].onclick = function() {sortRows(table, n);};
+//					}(i)); //将i的值赋给局部变量n
+//				}
+//			}
+//		}
+//		
+//		removeChild()方法是从文档树中删除一个节点，但是要小心，该方法不是在待删除节点上调用的，而是在其父节点上调用，并将需要删除的节点作为
+//	参数传入到方法里面，假如需要删除一个n节点，可以这样调用：
+//		n.parentNode.removeChild(n);
+//		
+//		replaceChild()方法删除一个子节点并用一个新的节点取而代之，在父节点上调用此方法，第一个参数是新节点，第二个参数是需要替代的节点，如果
+//	需要一段文本来替代节点n，可以这样调用；
+//		n.parentNode.replaceChild(document.createTextNode("new textContent"), n);
+//		下面展示了replaceChild()的另一种用法：
+//		{
+//			//使用一个新的<b>元素来替换n节点，并使n成为该元素的子节点
+//			function embolden(n) {
+//				if(typeof n === "string") n = document.getElementById(n);
+//				var parent = n.parentNode;
+//				var b = docuemnt.createElement("b");
+//				parent.replaceChild(b, n);
+//				b.appendChild(n);
+//			}
+//		}
+//		
+//		DocuemntFragment是一种特殊的Node，它作为其他节点的一个临时容器，可以这样创建它：
+//		
+//		var frag = document.createDocuemntFragment();
+//		
+//		像Document节点一样，DocumentFragment节点是独立的，而不是其他文档中的一部分，它的parentNode总是为null，但类似于Element,它可以有
+//	自己的子节点，可以用appendChild(),insertBefore()来操作它们；
+//		
+//		DocumentFragment的特殊之处在于，它使得一组节点被当作一个节点看待：如果给appendChild(),insertBefore()或replaceChild()传递一个
+//	DocumentFragment，其实是将该文档片段的所有子节点插入到文档中，而非片段本身。
+//		
+//		{
+//			//倒序排列n的子节点：
+//			function reverse(n) {
+//				//创建一个DocumentFragment作为临时容器
+//				var f = docuemnt.createDocumentFragment();
+//				while(n.lashChild) f.appendChild(n.lastChild);	//给f添加一个节点，n就会自动删除一个节点
+//				n.appendChild(f);	//最后把f的子节点一次性移回到n中
+//			}
+//		}
+//		
+//		下面的方法使用innerHTML和DocumentFragment实现了insertAdjacentHTML()方法：
+//		
+//		{
+//			var Insert = (function() {
+//				if(document.createElement("div").insertAdjacentHTML) { //如果支持原生的insertAdjacentHTML,则直接使用
+//					return {
+//						before: function(e, h) {e.insertAdjacentHTML("beforebegin", h);},
+//						after: function(e, h) {e.insertAdjacentHTML("afterend", h);},
+//						atStart: function(e, h) {e.insertAdjacentHTML("afterbegin", h);},
+//						atEnd: function(e, h) {e.insertAdjacentHTML("beforeend", h);}
+//					};
+//				}
+//				//否则就是没有原生的insertAdjacentHTML，同样的实现4个插入函数，并用他们来定义insertAdjacentHTML
+//				//首先，定义一个工具函数，传入HTML字符串，返回一个DocumentFragment，它包含解析后的HTML表示
+//				function fragment(html) {
+//					var elt = document.createElement("div");
+//					var frag = document.createDocumentFragment();
+//					elt.innerHTML = html;
+//					while(elt.firstChild) 
+//						frag.appendChild(elt.firstChild);
+//					return frag;
+//				}
+//				var Insert = {
+//					before: function(elt, html) {
+//						elt.parentNode.insertBefore(fragment(html), elt);
+//					},
+//					after: function(elt, html) {
+//						elt.parentNode.insertBefore(fragment(html), elt.nextSibling);
+//					},
+//					atStart: function(elt, html) {
+//						elt.insertBefore(fragment(html), elt.firstChild);
+//					},
+//					atEnd: function(elt, html) {
+//						elt.appendChild(fragment(html));
+//					}
+//				}
+//				Element.prototype.insertAdjacentHTML = function (pos, html) {
+//					switch(pos.toLowerCase()) {
+//						case "beforebegin": return Insert.before(this, html);
+//						case "afterend": return Insert.after(this, html);
+//						case "afterbegin": return Insert.atStart(this, html);
+//						case "beforeend": return Insert.atEnd(this, html);
+//					}
+//				}
+//				return Insert;
+//			}());
+//		}
+	
+	</script>
+</head>
+
+<body>
+</body>
+</html>
