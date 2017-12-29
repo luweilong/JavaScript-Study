@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>无标题文档</title>
+	<script>
+//		浏览器在渲窗口中渲染文档时，它创建文档的一个视觉表现层，在那里元素有自己的位置和尺寸。通常web程序可以将文档看作是元素的树，并且不用关心在屏
+//	幕上这些元素是如何渲染的，但有时，判定一个元素精确的几个形状也是非常有必要的。
+//		元素的位置是以像素来度量的，向右代表X坐标的增加，向下代表Y坐标的增加，但是，有两个不同的点作为坐标系的原点：元素X和Y坐标可以相对于文档的左
+//	上角或者相对于在其中显示文档的视口的左上角。
+//		在顶级窗口和标签页中，视口只是实际显示文档内容的浏览器的一部分：它不包括浏览器的“外壳”（如菜单和工具条）,针对框架页中显示的文档，视口是定义
+//	了框架页的<iframe>元素，无论在何种情况下，当讨论元素的位置时，必须弄清楚所使用的坐标是文档坐标还是视口坐标。
+//		如果文档比视口小，或者说还没有出现滚动，那么文档的左上角就是视口的左上角，文档和视口坐标系统是同一个，一般来说，要在两种坐标系中转换，必须加
+//	上或减去滚动的偏移量，文档坐标比视口坐标更加基础，并且用户在滚动时他们不会发生变化，不过，在客户端编程中使用视口坐标是非常常见的，当使用CSS指定
+//	元素的位置时运用了文档坐标，但是最常见的查询元素位置的发放返回视口坐标中的位置，类似的， 当为鼠标事件注册事件处理函数的时候，报告的鼠标指针的坐标
+//	是在视口坐标系中的。
+//		为了在坐标系中转换，我们需要判定浏览器窗口中的滚动条的位置，Window对象的pageXOffset和pageYOffset属性在所有值浏览器中提供这些值。
+//	另外，所有浏览器也可以通过scrollLeft和scrollTop属性来获得滚动条的位置，令人疑惑的是，正常情况下通过查询文档的根节点来获取这些值，但在怪异模式中，必须在文档的<body>元素上查询他们。
+//		如何简便的查询滚动条的位置：
+//		{
+//			//以一个对象的x属性和y属性的方式返回滚动条的偏移量
+//			function getScrollOffset(w) {
+//				w = w || window;	//使用指定的窗口，若没指定，使用当前窗口
+//				
+//				//除了IE 8 及更早的版本外，其他浏览器都能用
+//				if(w.pageXOffset !== null) return {x: w.pageXOffset, y: w.pageYOffset};
+//				//对标准模式下的IE（或所有浏览器）
+//				var d = w.document;
+//				if(docuemnt.compatMode == "CSS1Compat")
+//					return {x: d.documentElement.scrollLeft, y: d.documentElement.scrollTop};
+//				//对怪异模式下的浏览器
+//				return {x: d.body.scrollLeft, y: d.body.scrollTop };
+//			}
+//		}
+//		
+//		有时候能够判定视口的尺寸也是非常有用的，例如，为了确定文档中哪些部分是当前可见的，利用滚动偏移量查询视口尺寸的方法在IE8以及更早的浏览器中
+//	是无法使用的，而且该技术在IE中的应用还要取决于标准模式还是怪异模式，下面是一个简单的查询视口尺寸的方法，和上面的查询滚动条的方法很相似：
+//		{
+//			//以一个对象的w和h属性返回视口的尺寸
+//			function getViewportSize(w) {
+//				w = w || window;
+//				
+//				//除了IE8和更早的版本，其他浏览器都可以使用
+//				if(w.innerWidth !== null) return {w: w.innerWidth, h: w.innerHeight};
+//				//标准模式下的IE或任何浏览器
+//				var d = w.docuemnt;
+//				if(docuemnt.compatMode == "CSS1Compat") 
+//					return {w: d.docuemntElement.clientWidth,
+//						   	h: d.documentElement.clientHeight};
+//				//怪异模式下的浏览器
+//				return {w: d.body.clientWidth, h: d.body.clientHeight};
+//			}
+//		}
+//		
+//		判定一个元素最简单的方法就是调用它的getBoundingClientRect()方法,它不需要参数，返回一个带有left，right，top，bottom属性的对象，
+//	left和top属性指的是元素左上角的X和Y的坐标，right和bottom指的是元素的右下角的X和Y的坐标。这个方法返回的是元素在视口坐标中的位置，为了转换
+//	为用户滚动了浏览器窗口后仍然有效的文档坐标，需要加上滚动的偏移量：
+//		{
+//			var box = e.getBoundingClientRect();
+//			var offsets = getScrollOffset();
+//			var x = box.left + offsets.x;
+//			var y = box.top + offsets.y;
+//		}
+//		在很多浏览器中，getBoundingClientRect()返回的对象还包括width和height属性，但是在原始的IE中未实现，为了简便起见，可以这样计算元素的
+//	width和height：
+//		{
+//			var box = e.getBoundingClientRect();
+//			var w = box.width || (box.right - box.left);
+//			var h = box.height || (box.bottom - box.top);
+//		}
+//		需要注意的是，该方法返回的坐标包含元素的边框和内边距，但不包含外边距。
+//		浏览器在布局时块状元素总是矩形的，但是，内联元素可能跨行，因此可能由多个矩形组成，如果想查询内联元素的每个独立的矩形，调用getClientRect()方法可以获得一个只读的类数组对象，它的每个元素类似于getBoundingClientRect()返回的矩形对象，但是这些对象不是实时的，
+//	他们只是调用方法时的文档视觉状态的静态快照，在用户滚动或者更改浏览器窗口大小的时候不会更新它们。
+//	
+//		我们已经知道了如何在视口中判定元素的位置，但有的时候，我们想反过来，判定在视口中指定的位置上有什么元素，可以使用Document的elementFromPoint()方法来判定。传递X和Y坐标，该方法返回在一个指定的位置上的元素，如果指定的点在视口之外，elementFromPoint()返回null
+//	即使该点在转换为文档坐标后是完美有效的，返回值也依旧是null。
+//		elementFromPoint()方法看起来很有用，但是，鼠标事件对象已经在target属性中包含了这些信息，所以该方法并不是很常用。
+//		
+//		scrollLeft和scrollTop属性可以用来设置让浏览器滚动，但有一种更简单的方法从javascript早期就开始支持的，Window对象的scrollTo()
+//	方法，接受一个点的X和Y坐标，并作为滚动条的偏移量设置他们，也就是说窗口滚动到指定的点出现在视口的左上角，如果该点太接近于文档的下边缘或右边缘，
+//	浏览器将尽量保证它和视口之间的距离最近，但是无法达到一致。以下代码，滚动浏览器到文档的最下面的页面可见。
+//		{
+//			//获得文档和视口的高度，
+//			var documentHeight = document.documentElement.offsetHeight;
+//			var viewportHeight = window.innertHeight;
+//			
+//			//然后，滚动让最后一页在视口中可见
+//			window.scrollTo(0, documentHeight - viewportHeight);
+//		}
+//		
+//		Window对象的scrollBy()方法和scrollTo()方法类似，但他的参数是相对的，并在当前滚动条的偏移量上增加，下面是一个小例子：
+//		{
+//			//每200毫秒向下滚动10像素，但是注意它无法关闭
+//			javascript:void setInterval(function() { scrollBy(0, 10)}, 200);
+//		}
+//		一般来说，如果我们想让文档滚动到让某一个元素在视口中可见，可以利用getBoundingClientRect()方法计算元素的位置，并转换为文档坐标，然后使用
+//	scrollTo()方法达到目的，但是在需要显示的元素上调用scrollIntoView()更加的方便，该方法保证了元素能在视口中可见，默认情况下，它试图将元素的上边缘放在或接近视口的上边缘，如果传递false作为参数，它将试图把元素的下边缘放在或接近视口的下边缘。
+//	
+//		getBoundingClientRect()方法在所有浏览器山都有定义，但如果需要支持老式浏览器，不能依靠此方法而需要更古老的技术来判定元素的尺寸和位置，
+//	元素的尺寸比较简单，任何HTML元素的只读属性offsetWidth和offsetHeight以CSS像素返回它的屏幕尺寸，返回的尺寸包含元素的边框和内边距，除去了
+//	外边框。
+//		所有的HTML元素拥有offsetLeft和offsetTop元素来返回元素的X和Y坐标。对于很多元素，这些值是文档坐标。并直接指定元素的位置，但是有特殊的
+//	即已定位元素的后代元素和一些其他元素，这些元素返回的坐标是相对于祖先元素而非文档，offsetParent属性指定这些元素所相对的父元素，如果
+//	offsetParent为null，这些属性都是文档坐标。因此一般来说，用offsetLeft和offsetTop来计算元素e的位置需要一个循环：
+//	{
+//		function getElementPosition(e) {
+//			var x = 0, y = 0;
+//			while(e.offsetParent !== null) {
+//				x += e.offsetLeft;
+//				y += e.offsetTop;
+//				e = e.offsetParent;
+//			}
+//			return {x: x, y: y};
+//		}
+//	}
+//		除了这些以offset开头的属性外，所有元素还定义了两组属性，其名称以client和scroll开头，即每个HTML元素都有以下属性：
+//			offsetLeft		clientLeft		scrollLeft
+//			offsetTop		clientTop		scrollTop
+//			offsetWidth		clienttWidth	scrolltWidth	
+//			offsetHeight	clientHeight	scrollHeight
+//			offsetParent
+//		
+//		为了理解这些client和scroll属性，首先要明白一点有的时候元素的实际大小可能比分配用来容纳内容的盒子大，因此单个元素可能有滚动条，内容区域
+//	是视口，就像浏览器的窗口，当实际内容比视口更大时，需要把元素的滚动条位置考虑进去。
+//		
+//		clientWidth和clientHeight类似offsetWidth和offsetHeight，不同的是，它们不包含边框，它们只包含内容和内边距，如果浏览器在内边距和
+//	边框之间包含了滚动条，clientWidth和clientHeight在其返回值里面也不包含滚动条，注意，内联元素的clientWidth和clientheight返回为0，有一个
+//	特例，当在文档的根元素上查询这些属性时，他们的返回值和窗口的innerWidth和innerHeight属性值相等。
+//		clientTop和clientLeft属性基本没什么用：他们指的是元素的内边距的外边缘到元素边框的外边缘的水平距离和垂直距离，通常这个数值就是边框的
+//	宽度，但是如果元素有滚动条，并且浏览器把滚动条放在了左侧或者顶部，那么这个值就包含了滚动条的宽度，对于内联元素clientTop和clientLeft总
+//	是为0；
+//		scrollWidth和scrollHeight是元素的内容区域加上它的任何溢出内容的尺寸，当内容正好匹配区域而没有溢出的时候，它的值和clientWidth,
+//	clientHeight相等，但是如果元素有溢出内容，它们就包含溢出内容的尺寸，返回值比clientWidth和clientHeight大。
+//		最后scrollTop和scrollLeft属性指定元素的滚动条的位置，注意，scrollTop和scrollLeft是可写的，通过设置它们来让元素的内容滚动。
+//		当文档包含滚动条和溢出内容时，上面的getElementPosition方法就不能正确的工作了，因为它没有把滚动条加进去，这里有一个修改版，它从累计的
+//	偏移量中减去了滚动条的位置，这样一来，将返回的位置从文档坐标转换为视口坐标。
+//		{
+//			function getElementPos(elt) {
+//				var x = 0, y = 0;
+//				for(var e = elt; e !== null; e = e.offsetParent) {
+//					x += e.offsetLeft;
+//					y += e.offsetTop;
+//				}
+//				for(var e = elt.parentNode; e !== null && e.nodeType == 1; e = e.parentNode) {
+//					x -= e.scrollLeft;
+//					y -= e.scrollTop;
+//				}
+//				return {x: x, y: y};
+//			}
+//		}
+//		在现代浏览器里面，getELementPos()方法和getBoundingClientRect()方法返回的值一样，但是不如后者高效，getElementPos()可以在不支持
+//	getBoundingCilentRect()方法的浏览器上使用，但实际上，在不支持getBoundingClientRect()方法的浏览器在元素位置方面有很多的不兼容性，靠
+//	如此简陋的方法难以胜任。
+		
+	</script>
+</head>
+
+<body>
+</body>
+</html>
