@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>无标题文档</title>
+	<script>
+//		HTML的<form>元素和各种各样的表单输入元素在客户端编程中有着重要的地位，这些HTML元素可以追溯到Web的最开始，比JavaScript更早，HTML表单
+//	是第一代Web应用程序背后的运作机制，它根本不需要JavaScript，用户的输入从表单元素来收集，表单将这些输入递交给服务器，服务器处理输入并生成一个
+//	新的HTML页面显示在客户端。
+//	
+//		即使当整个表单数据都是由客户端JavaScript来处理并不会提交到服务器时，HTML表单仍然是收集用户数据很好的方法。在服务端程序中，表单那必须有
+//	一个“提交”按钮，否则它没有用处，在客户端编程中，“提交”按钮不是必须的，尽管它有的时候很有用。
+//		下面是常用表单元素的一个概述：
+//		
+//			HTML元素					类型属性				事件处理程序				描述
+//			
+//		<input type="button">或		 "button"				onclick					按钮
+//		<button type="button">
+//			
+//		<input type="checkbox">		 "checkbox"				onchange				复选按钮
+//		
+//		<input type="file">			 "file"					onchange				载入Web服务器的文件的文件名输入域
+//		
+//		<input type="hidden">		 "hidden"				none					数据由表单提交，但对用户不可见
+//		
+//		<option>					 none					none					Selete对象的单个选项，事件处理程序在Selete
+//																					对象上，而非单独的option对象上
+//		<input type="password">		 "password"				onchange				密码输入框，输入的字符不可见
+//		
+//		<input type="radio">		"radio"					onchange				单选按钮，只能同时选定一个
+//		
+//		<input type="reset">或		"reset"					onclick					重置表单的按钮
+//		<button type="resrt">
+//		
+//		<selete>					 "selete-one"			onchange				选项只能选单列的列表或下拉菜单
+//		
+//		<selete multiple> 			 "selete-mutiple"		onchange				选项可以多选的列表
+//		
+//		<input type="submit">或		 "submit"				onclick					表单提交按钮
+//		<button type="submit">	
+//		
+//		<input type="text">			 "text"					onchange				单行文本输入域，type属性缺少或无法识别时的
+//																					默认<input>元素
+//		
+//		<textarea>					 "textarea"				onchange				多行文本输入域
+//		
+//		表单和它所包含的表单元素可以用标准方法getElementById()和getElementsByTagName()来选取，例如选取一个id为address的表单里面的所有
+//	<input>元素：
+//		var fields = document.getElementById("address").getElementsByTagName("input");
+//		
+//		在支持querySelectorAll()的浏览器中，从一个表单元素选取所有单选按钮或同名的的元素的代码如下：
+//		//id为"shiping"的表单中的所有单选按钮
+//		docuement.querySelectorAll("#shiping input[type="radio"]");
+//		//id为"shiping"的表单中的所有名字为“method”的单选按钮：
+//		document.querySelectorAll("#shiping input[type="radio"][name="method"]");
+//		
+//		有name或id属性的<form>元素能够通过很多方式来选取，例如name="address"的<form>可以使用下面的任意方式来选取，但是有的不推荐使用：
+//		
+//		window.address;	//不推荐，之前提到过，浏览器随时可以更改一些全局变量的名称
+//		document.address;	//仅当表单有name 属性时使用
+//		document.forms.address;		//显式访问有name或id的表单
+//		document.forms[n];	//不推荐，n是表单的序号
+//		
+//		前面提到过，document.forms是一个HTMLCollection对象，可以通过数字序号或id或name来选取表单元素，Form对象本身的行为类似于多个表单
+//	元素组成的HTMLCollection对象，也可以通过name或数字序号索引，一个name为"address"的表单的第一个元素的name是"street",可以使用下面任意
+//	一种方式来引用该元素：
+//		document.forms.address[0];
+//		document.forms.address.street;
+//		docuement.address.street;
+//		
+//		如果要明确的选取一个表单元素，可以使用元素的elements属性：
+//		document.forms.address.elements[0];
+//		document.forms.address.elements.street;
+//		
+//		一般来说，指定一个元素使用id属性比name属性更常用，但是name属性在表单元素中有特殊的用处，所以name属性在表单元素中更为常见，而其他元素较
+//	少使用，它应用于相关的复选按钮组和强制共享name属性，互斥的单选按钮组，注意，当使用name属性来索引一个HTMLCollection对象，并且他包含多个元素
+//	来共享name时，返回的是一个类数组对象，它含有所有的匹配值。
+//		{
+//			<form name="shiping">
+//				<fieldset><legend>Shiping Method</legend>
+//					<label><input type="radio" name="method" value="1st">First-Class</label>
+//					<label><input type="radio" name="method" value="2day">2-day-Air</label>
+//					<label><input type="radio" name="method" value="overnite">Overnite</label>
+//				</fieldset>
+//			</form>
+//		}
+//		对这个表单，可以使用下面的代码来引用单选按钮元素数组：
+//		
+//		var methods = document.forms.shiping.elements.method;
+//		
+//		注意，<form>元素本身有一个HTML属性和JavaScript属性为method，所以上面的代码要显示的使用elements属性，而非直接访问method属性，为了
+//	判定用户选择了哪种交通方式，需要遍历数组中的表单元素并检测checked属性：
+//		
+//		var shiping_method;
+//		for(var i = 0; i < methods.length; i++)
+//			if(method[i].checked) shiping_method = method[i].value;
+//		
+//		下面学习到的是表单元素的属性：
+//		
+//		上面描述到的elemnts[]属性是表单里面最有趣的属性，其他属性则没有那么重要，action,encoding,method,target属性则直接对应于<form>
+//	元素的action,encoding,method,target等HTML属性，这些属性控制了表单是如何提到数据到Web服务器并如何显示的，客户端JavaScript能够设置
+//	这些属性，不过仅当表单真的把这些数据提交到服务器时才起作用。
+//		在JavaScript产生之前，要用一个专门的”提交“按钮来提交表单，用一个专门的”重置“按钮来重置各种表单的值，JavaScript的Form对象支持两个
+//	方法，来达到同样的目的，submit()用于提交，reset()用于重置。
+//	
+//		下面是所有（多数）表单元素都有的属性，如果一些属性有专有的属性，会在单独介绍表单元素的时候描述他们。
+//		
+//		type	标识保单元素类型的只读字符串，针对用<input>标签定义的表单类型而言，就是其type属性的值，而其它表单元素定义type书信是为了更好的
+//				标识他们，用以在于<input>元素在类型检测时相互区别。
+//				
+//		form	对包含元素的Form对象的只读引用，如果一个元素没有包含在<form>元素中则为null。
+//		
+//		name 	只读的字符串，由HTML的name属性指定。
+//		
+//		value   可读/写的字符串，指定了表单包含或代表的”值“,它就是表单提交时发送到服务器的字符串，也是JavaScript程序感兴趣的部分，针对Text
+//				和Textarea，该属性值包含了用户输入的文本，对用<input>标签创建的按钮元素，该属性值指定了显示的文本，但是对于单选和复选按钮元素，
+//				该值对用户是不可见以及不可编辑的，它仅是用HTML属性value设置的一个字符串，他在提交表单的时候使用，在关联表单元素的额外数据时也很
+//				有用。
+//			
+//		每个表单元素都有一个onsubmit事件处理程序来侦测表单提交，还有一个onreset事件处理程序来侦测表单重置，表单提交前调用onsubmit程序，它通过
+//	返回false能够取消提交动作，这给JavaScript程序一个机会来检查用户的输入错误，目的是避免不完整或无效的数据通过网络提交到服务器端，注意，onsubmit事件处理程序只能通过单击”提交“按钮来触发，直接调用Form对象的submit()方法不会触发submit事件处理程序，onreset事件处理程序和onsubmit是类似的，它在表单重置之前调用，通过返回false能够阻止表单被重置，在表单中很少需要”重置“按钮，如果有需要的话，需要提醒用户是否确认
+//	重置，类似于onsubmit事件处理程序，onreset只能通过单击”重置“按钮来触发，直接调用Form对象的reset()方法不会触发onreset事件处理程序。
+//	
+//		当用户与表单交互时往往会触发click和change事件，通过定义onclick和onchange事件处理程序可以处理这些事件，一般来说，从字面上理解，当按钮
+//	表单元素被激活时他们会触发onclick事件，而用户改变其他表单元素所代表的值的时候会触发onchange事件，需要注意的是，文本区域的事件不是用户每输入
+//	一个键值就会触发，而是用户改变的元素的值然后将焦点移动到其他元素的时候才会触发，也就是说，调用事件处理程序意味着一个完整的改变，单选按钮和复选
+//	按框都有一个标识状态，他们的click和change事件都会触发，两个之间change更有用。
+//	
+//		表单元素在收到键盘的焦点时会触发focus事件，失去焦点时会触发blur事件。
+//		
+//		关于事件处理程序还有一点非常重要，在事件处理程序代码中，关键字this是触发该事件的文档元素的引用，因为包含在<form>元素中的表单元素都有一个
+//	Form对象的引用，所以事件处理程序可以通过this.form来获得Form对象的引用，再进一步，意味着某个表单元素的事件处理程序能够通过
+//	this.form.x来得到该表单中以x命名的元素。
+//	
+//		下面将详细的介绍常用的表单元素
+//		
+//		按钮：
+//		
+//		按钮是最常用的表单元素之一，因为从视觉上来说，它能引导用户去触发某种脚本互动。按钮元素本身没有什么默认行为，除非它有onclick事件处理程序，
+//	否则它并没有什么用处，以<input>元素定义的按钮会将value属性值以纯文本显示出来，以<button>定义的按钮会将元素的一切内容显示出来。
+//		注意，超链接和按钮很像，都是onclick事件处理程序，这两者的选用最好遵循：当onclick事件所触发的动作可以概念化为”跟随此链接“时，使用连接，
+//	否则，使用按钮。
+//		提交和重置本就是按钮，不同的是他们天生就有与自己关联的默认动作（提交和重置），如果onclick事件处理程序返回false，这些按钮的默认动作就不再
+//	执行，可以使用提交元素的onclick事件处理程序来执行表单校验，但是更为常见的是使用Form对象的onsubmit事件处理程序来执行表单校验。
+//			
+//		开关按钮：
+//		
+//		复选框和单选元素都是开关按钮，或者称有两种视觉形态的按钮，即选中和未选中。用户可以通过对其单击改变它的开关状态，单选元素为整组有相关性的元
+//	素而设计的，组内所有按钮的HTML属性name是相同的，按这种方法创建的单选元素具有互斥性：选择其一，其余变为未选中。复选框也通常使用并共享name属性，
+//	必须注意的是，当利用作为表单元素的名字来选中这些元素时，它返回的是一个类数组对象。
+//		当用户点击单选或复选框时，会触发onclick事件，如果由于单击开关按钮改变了它的状态，会触发onchang事件，但是如果是单击其他单选按钮而导致这个
+//	单选按钮状态的改变，后者不触发onchange事件。
+//	
+//		文本域：
+//		
+//		文本输入域在HTML和JavaScript程序中可能是最常进的元素，用户可以输入单行文本字符串。value属性表示用户输入的文本，通过设置该属性可以显示的
+//	指定应该在输入域中显示的文本。在HTML5中，placeholder属性指定了用户输入前在输入域中显示的提示信息，例如，日期的格式：
+//	
+//		Arrival Date<input type="text" name="arrival" placeholder="yyyy-mm-dd">
+//			
+//		文本输入域的onchange事件处理程序是在用户输入新的文本或编辑已存在的文本的时候触发，它表明用户完成了编辑并将焦点移出来输入域。
+//		
+//		Textarea元素类似于文本输入域元素，不同的是它允许用户输入多行文本，Textarea元素使用<textarea>标签来创建，与用<input>标签创建的文本域
+//	在语法上有显著的区别。尽管语法不一样，但是行为是类似的，value属性和onchange和Text一样。
+//	
+//		<input type="password">元素在用户输入时显示星号，它修改了输入的文本，起名字表明，用户输入密码时不用担心被背后的人看见，这很有用，但是
+//	需要注意，输入密码只能防止眼睛偷窥，在提交表单的时候未经过加密，当在网络上传输的时候可能被看见。
+//		
+//		<input type="file">元素将用户输入待上传到Web服务器的文件的名称，它由一个文本域和一个单击打开文件选择对话框的按钮所组成。该文件选取元素
+//	拥有onchange事件处理程序，但不同的是它的value属性是只读的，为了防止恶意的JavaScript程序欺骗用户上传本不想共享的文件。
+//		
+//		不同的文本输入元素定义onkeypres,onkeydow,onkeyup事件处理程序，可以从onkeypress或onkeydown事件处理程序中返回false，防止记录用户的
+//	按键。
+//	
+//		选择框和选择元素：
+//		select元素表示用户可以做出选择的一组选项，浏览器通常把它渲染成下拉菜单的形式，但当指定的size属性大于1时，它将显示为列表中的选项Select有两种形态，取决于它的type属性是如何设置的，当type属性为"select-multiple"时，允许用户选择多个选项，否则为"select-one",只能选取单个选项
+//		
+//		在某种程度上，"select-one"元素和一组单选框类似，"select-multiple"元素和一组复选框类似，但是由于Select元素显示的选项不是按钮开关，
+//	他们是由<option>元素定义，Select元素定了options属性，它是一个包含多个Option元素的类数组对象。
+//	
+//		当用户选取或取消选取一个选项时，Select对象触发onchange事件处理程序，针对"select-one"元素，它的可读/写的selectedIndex属性指定了当前
+//	被选中的选项。而对于"select-multiple"元素，单个的selectedIndex不足以表示选中的一组选项，在这种情况下，要判定哪些选项被选中，就必须遍历
+//	options[]数组，利用检测每个Option对象的selected属性。
+//	
+//		每个Option对象都有一个text属性，它表示在Select对象中的选项所显示的纯文本字符串，设置该属性可以改变显示给用户的文本，value属性指定了在
+//	表单提交时发送到Web服务器的文本字符串，它也是可读/写的。甚至在写纯客户端代码的时候，value属性是可以保存任何数据的好地方，在用户选取特定的选项时可以使用这些数据，需要注意的是Option对象没有与表单相关的事件处理程序，用包含Select元素的onchange事件处理程序代替。
+//	
+//		此外，Option对象有一个options属性可以用特殊的方法动态的改变显示在Select元素中的选项，通过设置options.length为一个希望的值可以截断
+//	Option元素数组，而设置options.length为0可以从Select元素中移除所有的选项，设置options[]数组中的某个值为null，可以从Select对象中移除单
+//	个Option对象，这将删除该Option对象，options[]数组中的高端的元素自动移下来填补空缺。
+
+	</script>
+</head>
+
+<body>
+</body>
+</html>
