@@ -1,0 +1,70 @@
+  <!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>无标题文档</title>
+	<script>
+//		Document对象定义了许多特性，之前学过的docuemntElement,body,forms等，下面是一些有趣的属性：
+//		
+//		cookie
+//			允许JavaScript程序读/写HTTP cookie的特殊的属性，以后会详细学习到
+//		domain
+//			该属性允许当Web页面之间交互时，相同域名下相互信任的的Web服务器之间协作放宽同源策略安全限制
+//		lastModified
+//			包含文档修改时间的字符串
+//		location
+//			与Window对象的location属性引用同一个Location对象
+//		referrer
+//			如果有，它表示浏览器导航到当前连接的上一个文档，该属性值和HTTP的Referer头信息的内容相同，只是拼写上有两个r
+//		title
+//			文档的<title>和</title>之间的内容
+//		URL
+//			文档的URL，只读字符串而不是Location对象，该属性值与Location对象的href的初始值相同，只是不包含Location对象的动态变化。
+//			
+//		docuemnt.write()方法是一个有Netscape 2浏览器实现的非常早期的脚本化API，它曾在DOM之前就被引入了，也曾是文档中显示计算后的文本的唯一
+//	方法，新代码中已经不需要它了，但在已有代码中可能会看到它。
+//	
+//		document.write()方法会将字符串参数连接起来，然后将结果字符串插入到文档中调用它的脚本元素的位置，当脚本执行结束，浏览器解析并显示生成的
+//	结果。
+//	
+//		只有在解析文档时才能使用write()方法输出HTML到文档中，理解这点非常重要，也就是说能够在<script>标签的顶层代码中调用document.write()
+//	方法，就是因为这些脚本的执行是文档解析流程的一部分，如果将document.write()方法写在一个函数中，并且这个函数是由事件处理程序发起的，产生的结果
+//	将是擦除当前的文档和脚本，同理，在设置了defer和async属性的脚本中不要使用write()方法。
+//		可以使用write()方法在其他的窗口或标签页创建整个全新的文档。第一次调用write()方法将会清楚所有的文档内容，可以多次调用来逐步建立新文档的
+//	内容，传递给write()的内容可能缓存起来，并不会显示，直到调用文档对象的close()方法来结束该写序列。
+//		值得一提的是，document对象还支持writeln()方法，除了在其参数的输出之后追加一个换行符外，和write()一模一样。
+//		
+//		
+//		有时判定用户在页面上选取了哪些文本十分有用，可以用下面的函数来达到目的：
+//		{
+//			function getSelectedText() {
+//				if(window.getSelection)
+//					return window.getSelection().toString();	//HTML5标准API
+//				else if(document.getSelection)
+//					return document.selection.createRange().text;	//IE特有技术
+//			}
+//		}
+//		标准的window.getSelection()方法返回了一个Selection对象，后者描述了当前选取的一系列Range对象，toString()方法是Selection对象最
+//	常用和最广泛实现的方法，返回当前选取的文本内容。
+//		如上的代码在书签工具中特别有用，它操作选取的内容，然后利用搜索引擎或参考站点查找某个单词，下面的HTML连接可以在WiKipedia上查找当前选取的
+//	文本：
+//		<a href="javascript: var q;
+//				if(window.getSelection) q = window.getSelection().toString();
+//				else if(document.selection) q = document.selection.createRange().text;
+//				void window.open('http://en.wikipedia.org/wiki/' + q);">
+//			Look Up Selected Text In WiKipedia
+//		</a>
+//			
+//		但是上面的代码兼容性不是很好，Window对象的getSelection()方法无法选取那些表单元素<input>,<textarea>中选中的文本，它只返回在文档主体中
+//	选中的文本，而document.selection可以返回任意选中的文本。
+//		从文本输入域或<textarea>中获取选中的文本可以用下面的代码：
+//		elt.value.substring(elt.selectionStart, elt.selectionEnd);
+//		
+//		需要注意的是IE8及更早的版本不支持selectionStart和selectionEnd属性。
+
+	</script>
+</head>
+
+<body>
+</body>
+</html>
