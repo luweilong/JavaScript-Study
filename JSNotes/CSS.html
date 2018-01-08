@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>无标题文档</title>
+	<script>
+//		层叠样式表(Cascading Style Sheet，CSS)是一种指定HTML文档视觉表现的标准。CSS的本意是想让视觉设计师来使用，但是客户端程序员喜欢的原因是
+//	样式可以通过脚本来编辑。
+//	
+//		HTML文档的视觉显示包括很多变量：字体，颜色，间距等。我们称之为式样属性，CSS定义了这些属性以指定字体，颜色，外边距，边框，背景图片，文本对齐
+//	方式，元素尺寸和元素位置，规定了这些CSS属性的值，紧跟在属性后面的冒号和值，例如：
+//		font-weight: bold;
+//		有时为了更全面的描述一个元素的视觉体现，需要多个属性来指定，他们之间用分号隔开：
+//		margin-left: 30px;
+//		text-index: .5in;	/*1/2英寸缩进*/
+//		font-size: 12pt;
+//		值得注意的是，CSS里面的注释是“/ *“和‘* /”；
+//		有两种方式将一组定义视觉表现的CSS属性和相关的HTML文档关联到一起，第一种是给每个单独的HTML元素的style属性赋值，称为内联样式：
+//			<p style="margin: 20px; border: solid red 2px;">
+//				This paragraph has increased margins and is surronded by a red border
+//			</p>
+//		尽管如此，通常将单独的HTML元素与CSS样式分开，并把它们定义在一个样式表中会更有用。样式表通过选择器将一组样式属性和选择器描述的一组HTML元素
+//	关联到一起，例如上面的<p>元素可以这样定义：
+//		p {
+//			margin: 20px;
+//			border: solid red 2px;
+//		}
+//		使用<style>和</style>标签将样式表包裹起来，并放在<head>标签之内，这个样式表就和HTML文档关联起来了，类似<script>元素，<style>元素内
+//	容不会当成HTML来解析。
+//	
+//		当一个样式表需要在网站的多个页面来使用时，通常将其保存在自己的文件中比较好，这个文件不含任何的HTML标签，它可以被引入到HTML页面中，但是，
+//	不像<script>元素,<style>元素没有src属性，为了在页面中引入样式表，在文档的<head>元素里面使用<link>标签。
+//	
+//		<head>
+//			<title>Test</title>
+//			<link rel="stylesheet" href="mystyles.css" type="text/css">
+//		</head>
+//			
+//		下面是CSS的一些知识点：
+//		
+//		1.层叠：指示了应用于文档的任何给定元素的样式规则是各个来源的层叠效果：Web浏览器的默认样式表，文档的样式表，每个独立的元素的style属性，
+//	 讨论其优先级，也就是说元素的style属性中的样式覆盖了样式表中的样式，而样式表中的样式又覆盖了浏览器的默认样式，任意元素的视觉表现可能是这3
+//	 个来源的组合，而为了显示文档元素，浏览器必须组合这三个来源的样式值，计算的结果是一组实际用于显示元素的样式属性的值，这组值就是元素的“计算样式”
+//	 	2.复合属性：某些经常在一起使用的属性可以组合起来使用一个特殊的符合属性，例如：font-family，font-size，font-weight属性可以使用font
+//	的复合属性一次性设置。
+//		font: bold italic 24pt helvetica;
+//		同理，border，margin，padding属性是为元素的每条边都设置边框，外边距，内边距的复合属性。
+//		3.非标准属性：当浏览器厂商实现非标准CSS属性时，它们将属性名前加了一个厂商前缀，Firefox使用-moz-，IE使用-ms-，Chrome使用-webkit-，在
+//	解决不同浏览器中的兼容性的时候很有用。
+	</script>
+</head>
+
+<body>
+</body>
+</html>
