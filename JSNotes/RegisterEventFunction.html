@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>无标题文档</title>
+	<script>
+//		注册事件处理程序有两种方法，第一种是给事件目标对象或文档元素设置属性，另一种更加的通用，是将事件处理程序传递给对象或元素的一个方法，但复杂的
+//	是，两种方法都有两个版本，可以在JavaScript代码中设置事件处理程序为对象属性，或对于文档元素，可以在HTML中直接设置相应属性，对于通过方法调用的
+//	事件处理程序注册有一个标准方法，命名为addEventListener()，除了IE8以及更早的版本，其他浏览器都支持这个方法，对于IE9之前版本支持的是一个叫
+//	attachEvent()的不同方法。
+//	
+//		注册事件处理程序最简单的方法就是通过设置事件目标的属性为所需的事件处理函数，按照约定，事件处理程序属性的名字由"on"后面跟着事件名组成：
+//	"onclick","onmouseover","onload"等，注意这些属性名是区分大写小的，所有的都是小写，及时事件类型是由多个单词组成，下面是两个事件处理程序
+//	注册示例：
+//		{
+//			//设置Window对象的onload属性为一个函数
+//			//该函数是事件处理程序，当文档加载完毕时调用它。
+//			window.onload = function() {
+//				//查找一个<form>元素
+//				var elt = document.getElementById("shipping_address");
+//				//注册事件处理函数
+//				//在表单提交之前调用它
+//				elt.onsubmit = function() { return validata(this); }
+//			}
+//		}
+//			
+//		这种事件处理程序注册技术适用于所有浏览器的所有事件类型，但是，事件处理程序属性的缺点是其设计都是围绕着假设每个事件目标对于每种事件类型将
+//	最多只有一个处理程序，如果想编写能够在任意文档中都能使用的脚本代码，更好的方式是使用以这种不修改或覆盖任何已有注册处理程序的技术（比如
+//	addEventListener()）。
+//	
+//		用于设置的文档元素事件处理程序属性也能换成对应HTML标签的属性，如果这样做，属性值应该是JavaScript代码字符串，这段代码应该是事件处理程序
+//	函数的主体，而非完整的函数声明，也就是说，HTML事件处理程序代码不应该用大括号包围且使用function关键字作为前缀，例如：
+//		<button onclick="alert('thank you');">点击这里</button>
+//		如果HTML事件处理程序属性包含多条JavaScript语句，要记住必须使用分号分隔这些语句或者断开属性值使其跨多行。
+//		某些事件类型能够通常直接在浏览器而非任何特定文档元素上触发，在JavaScript中，这些事件处理程序在WIndow对象上注册，在HTML中，会把他们放
+//	正在<body>标签上，但浏览器会在Window对象上注册它们，下面是HTML5规范草案定义的这类事件处理程序的完整列表：
+//		onafterprint onfocus ononline onresize onbeforeprint onhashchange onpapehide onstorage onbeforeunload onload
+//		onpapeshow onundo onerror onoffline onredo
+//		客户端编程的通用风格是保持HTML内容和JavaScript行为分离，遵循这条规则的程序员应该禁止（或至少避免）使用HTML事件处理程序属性，因为这些属
+//	性直接混合了JavaScript和HTML。
+//	
+//		在除了IE8和更早版本的浏览器之外，所有浏览器的事件模型中，任何能成为事件目标的对象，包括Window，Document，Element对象都有一个标准的方法
+//	addEventListener()，使用这个方法可以为事件目标注册事件处理函数，这个方法接受三个参数，第一个是要处理的事件类型的字符串，注意，在这里不带
+//	"on"，第二个参数是处理事件时调用的函数，第三个参数是一个布尔值，默认情况下为false，如果设置成了true，那么这个事件处理程序将会注册为捕获事件
+//	处理程序，并在事件的不同的阶段调用。
+//		下面这段代码在<button>元素上注册了click事件的两个处理程序，注意所用两个技术之间的不同：
+//		{
+//			<button id="myButton">click me</button>
+//			<script>
+//				var b = document.getElementById("myButton");
+//				b.onclick = function(){ alert('Thank you');}
+//				b.addEventListener("click", function(){ alert('Thank you again');}, false);
+//			</sript>//因无法注释，故意拼写错误
+//		}
+		
+//		用"click"作为第一个参数调用addEventListener()不会影响onclick属性的值，在前面的代码中，单机按钮会产生两个alert()对话框，更重要的是
+//	能够通过多次调用addEventListener()为用一个对象注册同意事件类型的多个处理程序函数，放对象上法伤事件时，所有该事件类型的注册处理程序会按照注册
+//	的顺序调用，使用相同的参数在同一个对象上多次调用addEventListener()时没用的，处理程序仍然只注册一次，同事重复调用也不会改变调用处理程序的顺序。
+//		相对addEventListener()的是removeEventListener()，它同样有三个参数，从对象中删除事件处理程序而非添加，它常用于临时注册事件处理程序，
+//	然后不就就删除它。
+//	
+//		IE9之前的版本不支持addEventListener()和removeEventListener()，不过IE5之后定义了类似的方法attachEvent()和DetachEvent()；
+//		他们比较类似，但是还是有以下的区别：
+//		1.因为IE事件类型不支持捕获事件，所以attachEvent()和DetachEvent()只需要两个参数，即事件目标和事件处理程序函数。
+//		2.IE方法的第一个参数使用了带"on前缀的事件处理程序属性名。
+//		3.attach()方法允许相同的事件注册多次，调用时候的次数和注册的次数一样多。
+//		下面是解决兼容性的代码：
+//		{
+//			var b = document.getElementById("myButton");
+//			var handler = function() {alert("Thank you"); }
+//			if(b.addEventListener)
+//				b.addEventListener("click", handler, false);
+//			else if(b.attachEvent)
+//				b.attachEvent("onclick", handler);
+//		}
+//		
+//		一旦注册了事件处理程序，浏览器就会在指定对象 上发生指定指定类型事件时自动调用它，下面介绍事件处理程序的参数、滴啊用上下文，用于作用于和事件
+//	处理程序返回值的意义，遗憾的是，有一些部分在IE8已经更早的版本中和其他浏览器是不同的。
+//	
+//		事件处理程序的参数，通常调用事件处理程序时把事件对象作为他们的一个参数，事件对象的属性提供了有关事件的详细信息，例如type属性提供了发生的
+//	事件的类型，在IE8及以前的版本中，通过设置属性注册事件处理程序，当调用他们时并未传递事件对象，取而代之，需要通过全局对象window.event来获得
+//	事件对象，你可以这样编写事件处理程序，如果没有参数就使用window.event。
+//	{
+//		function handler(event) {
+//			event = event || window.event;
+//			//处理代码出现在下方
+//		}
+//	}
+//		向使用attachEvent()注册的事件处理程序传递事件对象，他们也可以通过window.event来获取事件对象。
+//		
+//		事件处理程序的运行环境，当通过设置属性注册处理程序时，这看起来像是在元素上添加了新的方法，事件处理程序在事件目标上定义，所以不出意外，在
+//	事件处理程序中，this关键字指的是事件目标。甚至当使用addEventListener()时，调用的处理程序使用事件目标作为它的this值，但是对于
+//	attachEvent()来说，它的this关键字不是指事件目标，而是window对象，我们可以这样来处理：
+//	{
+//		//在指定的事件目标上注册用于特定的事件类型的特定的处理程序
+//		//确保处理程序一直作为事件目标的方法调用、
+//		function addEvent(target, type, handler) {
+//			if(target.addEventListener)
+//				target.addEventListener(type, handler, false);
+//			else
+//				target.attachEvent("on" + type, function(event){
+//					//把处理程序作为事件目标的方法调用
+//					return handler.call(target, event);
+//				});//注意这个方法添加的事件处理程序不能删除，因为传递给attachEvent()的包装函数没有保留下来传递给detachEvent()。
+//		}
+//	}
+//		事件处理程序的作用域，像所有的JavaScript函数一样，事件处理程序从词法上讲也是作用域，他们在其定义时的作用域而非调用时的作用域中执行，并且
+//	它们能够存取那个作用域中的任何一个本地变量。
+//		但是，通过HTML属性注册的事件处理程序时一个例外，他们被装换为能存取全局变量的顶级函数，而非任何本地变量，但因为历史原因，他们运行在一个修改
+//	后的作用域链中。通过HTML属性定义的是金处理程序能好像本地变量一样使用目标对象、容器<form>对象和Document对象的属性，联系之前提到过的可以使用id
+//	属性来直接引用任何的表单元素，并且还有快捷方式，所以要小心，另一方面，HTML事件处理程序中修改的作用域链是陷阱，因为作用域链中每个对象的属性在全局对象中都有相同名字的属性。所以要特别注意。
+//	
+//		事件处理程序的返回值，通过设置对象属性或HTML属性注册事件处理程序的返回值有时是非常有意义的，通常情况下，返回值false就是告诉浏览器不要
+//	执行这个事件相关的默认操作，例如，表单提交按钮的onclick的事件处理程序能返回false来阻止浏览器提交表单，Window对象的onbeforeunolad事件处理
+//	程序的返回值也很有用，当浏览器要跳转到新页面时触发这个事件，如果事件处理程序返回一个字符串，那么它将出现在询问用户是否想离开当前页的标准对话框中
+//	理解事件处理程序的返回值只对通过属性注册的处理程序有意义，如果使用的addEventListener()或attachEvent()，那么必须调用preventDefault()或
+//	设置对象的returnValue属性。
+//	
+//		事件处理程序的调用顺序，文档元素或其他对象可以为指定事件类型注册多个事件处理程序，当适当的事件发生时，浏览器必须按照如下规则调用时间处理
+//	程序：
+//		1.通过设置对象属性或HTML属性注册的事件处理程序一直优先调用。
+//		2.使用addEventListener()注册的事件处理程序按照他们的注册顺序调用。
+//		3.使用attachEvent()注册的事件处理程序可能按照任何的顺序调用，所以代码不依赖于调用顺序。
+//		
+//		事件传播，当事件目标是Window对象或是其他一些特殊的单独对象时，浏览器简单的通过调用对象上的处理程序响应事件，当事件目标是文档或者文档元素时
+//	情况比较复杂。在调用在目标元素上注册的事件处理函数之后，大部分事件会冒泡到DOM树根，调用目标的父元素的事件处理函数，然后调用目标的祖先元素上注册
+//	的事件处理函数，这会一直到Document对象，最后到达Window对象，事件冒泡为大量的单独元素上注册事件处理函数提供的方案，即在共同的祖先上注册一个事
+//	件处理函数来处理所有的事件。发生在文档上大部分事件都会冒泡，值得注意的例外是，focus，blur和scroll事件，文档元素上的load事件会冒泡，但它会
+//	在Document对象上停止冒泡而不会传播到Window对象，只有当整个文档都夹杂完毕时才会触发Window对象上的load事件。
+//		事件冒泡是事件传播的第三个“阶段”，目标本身调用事件处理程序是第二个“阶段”，第一个阶段甚至发生于在目标处理程序调用之前，称为“捕获”阶段，之前
+//	提到过，addEventListener()方法的第三个参数为一个布尔值，默认是false，如果设置成了true，那么事件处理程序会被注册为捕获事件处理程序，他会在事
+//	件传播的第一个阶段调用，事件传播的捕获阶段像是反向的冒泡阶段，最先调用Window对象的捕获处理程序，然后向下Document，body，DOM树，一直到父元素的捕获事件处理程序，在目标对象本身上注册的捕获事件处理程序不会被调用。
+//	
+//		事件取消，在支持addEventListener()的浏览器中，可以调用事件对象的preventDefault()方法来取消事件的默认操作，不过在IE9之前的IE中，可以
+//	通过设置事件对象的returnValue属性为false来达到同样的效果，下面的代码假设一个事件处理程序，它使用全部三种取消技术
+//		{
+//			function cancelHandler(event) {
+//				var event = event || window.event;//用于IE
+//				// 这里是处理事情的代码
+//				
+//				//下面是取消事件相关的默认行为
+//				if(event.preventDefault) event.preventDefault();//标准方法
+//				else if(event.returnValue) event.returnValue = false;//IE
+//				return false;//用于处理使用对象属性注册的处理程序
+//				
+//			}
+//		}
+//		此外，DOM事件模型还定义了Event对象属性defaultPrevented，其常态下是false，但是如果preventDefault()被调用它将变成true；
+//		取消事件相关的默认操作只是事件取消中的一种，我们也能取消事件传播，在支持addEventListener()的浏览器中，可以调用事件对象的一个
+//	stopPropagation()方法以阻止事件的继续传播，如果在同一对象上定义了其他处理程序，剩下的处理程序将依旧会被调用，但调用stopPropagation()
+//	之后任何其他对象上的事件处理程序将不会被调用，stopPropagation()方法可以在传播期间的任何时间调用，它能工作在捕获期阶段，事件目标本身中和冒泡
+//	阶段。IE9之前的IE不支持stopPropagation()方法，相反，IE事件对象有一个cancelBubble的属性，设置这个属性为true能阻止事件进一步传播。此外，
+//	Event对象上还有一个方法，命名为stopImmediatePropagation(),类似于stopPropagation()，这个方法阻止了其他对象的事件传播，但也阻止了在相同
+//	对象上注册的任何其他事件处理程序的调用。
+//	
+	</script>
+</head>
+
+<body>
+</body>
+</html>
